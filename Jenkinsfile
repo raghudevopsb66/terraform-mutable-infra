@@ -1,32 +1,5 @@
-pipeline {
-  agent any
+@Library('roboshop') _
 
-  options {
-    ansiColor('xterm')
-  }
+terraform()
 
-  parameters {
-    choice(name: 'ENV', choices: ['', 'dev', 'prod'], description: 'Pick Env')
-  }
 
-  stages {
-
-    stage('Terraform Apply') {
-      steps {
-        sh '''
-          terrafile 
-          terraform init -backend-config=env/${ENV}-backend.tfvars
-          terraform apply -auto-approve -var-file=env/${ENV}.tfvars
-        '''
-      }
-    }
-
-  }
-
-  post {
-    always {
-      cleanWs()
-    }
-  }
-
-}
